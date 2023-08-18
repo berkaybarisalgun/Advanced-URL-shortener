@@ -13,7 +13,7 @@ public class DtoToEntityConverter {
         return UrlDto.builder()
                 .id(url.getId())
                 .url(url.getUrl())
-                .key(url.getkey())
+                .ref(url.getRef())
                 .build();
     }
 

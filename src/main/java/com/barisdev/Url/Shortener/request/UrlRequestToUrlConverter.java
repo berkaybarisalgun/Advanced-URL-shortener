@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 public class UrlRequestToUrlConverter {
 
     public Url urlRequestToUrl(UrlRequest urlRequest){
-        Url.builder()
+       return  Url.builder()
                 .url(urlRequest.getUrl())
-                .key(urlRequest.getkey())
+                .ref(urlRequest.getRef())
                 .build();
     }
 }

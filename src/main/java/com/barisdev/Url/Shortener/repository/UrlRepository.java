@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class UrlRepository  extends JpaRepository<Url,Long> {
+public interface UrlRepository  extends JpaRepository<Url,Long> {
 
-    Optional<Url> findByCode(String code);
+    Optional<Url> findByref(String ref);
 }

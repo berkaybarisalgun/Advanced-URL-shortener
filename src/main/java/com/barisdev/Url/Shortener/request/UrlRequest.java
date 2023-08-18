@@ -16,6 +16,6 @@ public class UrlRequest {
     @NotNull
     private String url;
 
-    private String get;
+    private String ref;
 
 }
