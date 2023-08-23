@@ -10,6 +10,7 @@ public class UrlRequestToUrlConverter {
        return  Url.builder()
                 .url(urlRequest.getUrl())
                 .ref(urlRequest.getRef())
+               .expirationDate(urlRequest.getExpirationDate())
                 .build();
     }
 }

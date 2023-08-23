@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.NotFound;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @Data
@@ -24,6 +26,8 @@ public class Url {
 
     @Column(unique = true, nullable = false)
     private String ref;
+
+    private LocalDateTime expirationDate;
 
 
 

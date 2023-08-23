@@ -14,6 +14,7 @@ public class DtoToEntityConverter {
                 .id(url.getId())
                 .url(url.getUrl())
                 .ref(url.getRef())
+                .expirationDate(url.getExpirationDate())
                 .build();
     }
 

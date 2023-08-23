@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.time.LocalDateTime;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -17,5 +19,7 @@ public class UrlRequest {
     private String url;
 
     private String ref;
+
+    private LocalDateTime expirationDate;
 
 }
