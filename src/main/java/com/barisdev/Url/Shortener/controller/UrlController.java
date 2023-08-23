@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -34,19 +35,26 @@ public class UrlController {
     }
 
 
-
     @GetMapping
-    public ResponseEntity<List<UrlDto>> getAllUrls(){
+    public ResponseEntity<List<UrlDto>> getAllUrls() {
         return new ResponseEntity<List<UrlDto>>(
-                dtoToEntityConverter.convertAllToDto(service.getAllUrl()),HttpStatus.OK
+                dtoToEntityConverter.convertAllToDto(service.getAllUrl()), HttpStatus.OK
 
         );
     }
 
-    @GetMapping("get/{ref}")
-    public ResponseEntity getUrl(@Valid @NotEmpty @PathVariable String ref) throws URISyntaxException {
+    @GetMapping("/get/{ref}")
+    public ResponseEntity<UrlDto> getUrlByCode(@Valid @NotEmpty @PathVariable String ref) {
+        ref = ref.toUpperCase();
+        return new ResponseEntity<UrlDto>(
+                dtoToEntityConverter.convertToDto(service.getUrlByref(ref)), HttpStatus.OK
+        );
+    }
 
-        Url url=service.getUrlByref(ref);
+    @GetMapping("/{ref}")
+    public ResponseEntity<UrlDto> redirect(@Valid @NotEmpty @PathVariable String ref) throws URISyntaxException {
+
+        Url url = service.getUrlByref(ref);
 
         URI uri = new URI(url.getUrl());
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -55,33 +63,34 @@ public class UrlController {
         return new ResponseEntity<UrlDto>(
                 httpHeaders, HttpStatus.SEE_OTHER
         );
-
     }
 
-    @GetMapping("/{code}")
-    public ResponseEntity<UrlDto> redirect(@Valid @NotEmpty @PathVariable String code) throws URISyntaxException {
 
-        Url shortUrl = service.getUrlByref(code);
-
-        URI uri = new URI(shortUrl.getUrl());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);
-
+    @PostMapping("/create/")
+    public ResponseEntity<?> create(@Valid @RequestBody UrlRequest urlRequest) {
+        Url url = urlRequestToUrlConverter.urlRequestToUrl(urlRequest);
         return new ResponseEntity<UrlDto>(
-                httpHeaders, HttpStatus.SEE_OTHER
+                dtoToEntityConverter.convertToDto(service.create(url)), HttpStatus.CREATED
         );
     }
 
-    @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody UrlRequest shortUrlRequest) {
-        Url shortUrl = urlRequestToUrlConverter.urlRequestToUrl(shortUrlRequest);
-        return new ResponseEntity<UrlDto>(
-                dtoToEntityConverter.convertToDto(service.create(shortUrl)), HttpStatus.CREATED
-        );
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.ok("Url deleted successfully");
     }
 
+    @PutMapping("/update/{ref}") // Specify the URL for updating
+    public ResponseEntity<?> updateUrl(@Valid @RequestBody UrlRequest urlRequest, @PathVariable String ref) {
 
+        Url url = urlRequestToUrlConverter.urlRequestToUrl(urlRequest);
+        url.setRef(ref); // Set the ref from the URL path
+        Url updatedUrl = service.update(url);
 
+        return new ResponseEntity<UrlDto>(
+                dtoToEntityConverter.convertToDto(updatedUrl), HttpStatus.OK
+        );
+    }
 
 
 }

@@ -7,43 +7,66 @@ import com.barisdev.Url.Shortener.util.RandomStringGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UrlService {
     private UrlRepository repository;
 
-    private RandomStringGenerator randomStringGenerator=new RandomStringGenerator();
+    private RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
 
 
     public UrlService(UrlRepository repository) {
         this.repository = repository;
     }
 
-    public List<Url> getAllUrl(){
+    public List<Url> getAllUrl() {
         return repository.findAll();
     }
-    public Url getUrlByref(String ref){
+
+    public Url getUrlByref(String ref) {
         return repository.findByref(ref).orElseThrow(
-                ()->new RuntimeException("not found")
+                () -> new RuntimeException("not found")
         );
     }
 
-    public Url create(Url url){
-        if(url.getRef()==null || url.getRef().isEmpty()){
+    public Url create(Url url) {
+        if (url.getRef() == null || url.getRef().isEmpty()) {
             url.setRef(generateref());
-        }
-        else if(repository.findByref(url.getRef()).isPresent()){
+        } else if (repository.findByref(url.getRef()).isPresent()) {
             throw new RuntimeException("same value already exist");
         }
         return repository.save(url);
     }
 
+    public void delete(Long id) {
+        Optional<Url> urlDelete = repository.findById(id);
+        if (urlDelete.isPresent()) {
+            repository.deleteById(urlDelete.get().getId());
+        } else {
+            throw new RuntimeException("Resource not found to delete");
+        }
+    }
+
+    public Url update(Url url) {
+        Optional<Url> existingUrlOpt = repository.findByref(url.getRef());
+
+        if (existingUrlOpt.isPresent()) {
+            Url existingUrl = existingUrlOpt.get();
+            existingUrl.setUrl(url.getUrl()); // Update the URL value
+
+            return repository.save(existingUrl);
+        } else {
+            throw new RuntimeException("URL not found for update");
+        }
+    }
+
     private String generateref() {
         String ref;
 
-        do{
-            ref= randomStringGenerator.generateRandomString();
-        }while(repository.findByref(ref).isPresent());
+        do {
+            ref = randomStringGenerator.generateRandomString();
+        } while (repository.findByref(ref).isPresent());
 
         return ref;
 
