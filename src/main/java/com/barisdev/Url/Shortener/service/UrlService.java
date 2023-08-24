@@ -6,6 +6,8 @@ import com.barisdev.Url.Shortener.repository.UrlRepository;
 import com.barisdev.Url.Shortener.util.RandomStringGenerator;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,10 @@ public class UrlService {
     }
 
     public Url create(Url url) {
+        if(url.getExpirationDate()==null || url.getExpirationDate().isBefore(LocalDate.now())){
+            url.setExpirationDate(LocalDate.now().plusMonths(6));
+        }
+
         if (url.getRef() == null || url.getRef().isEmpty()) {
             url.setRef(generateref());
         } else if (repository.findByref(url.getRef()).isPresent()) {

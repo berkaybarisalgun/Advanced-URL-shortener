@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Builder
 @Data
@@ -20,6 +22,11 @@ public class UrlRequest {
 
     private String ref;
 
-    private LocalDateTime expirationDate;
+    private LocalDate expirationDate;
+
+    public void setExpirationDateAsString(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.expirationDate = LocalDate.parse(dateString, formatter);
+    }
 
 }

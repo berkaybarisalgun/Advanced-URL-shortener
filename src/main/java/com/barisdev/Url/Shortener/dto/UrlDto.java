@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
@@ -21,5 +22,5 @@ public class UrlDto {
 
     private String ref;
 
-    private LocalDateTime expirationDate;
+    private LocalDate expirationDate;
 }

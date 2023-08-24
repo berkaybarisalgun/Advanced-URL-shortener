@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.NotFound;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Builder
@@ -27,7 +29,13 @@ public class Url {
     @Column(unique = true, nullable = false)
     private String ref;
 
-    private LocalDateTime expirationDate;
+    @Column
+    private LocalDate expirationDate;
+
+    public void setExpirationDateAsString(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.expirationDate = LocalDate.parse(dateString, formatter);
+    }
 
 
 
