@@ -6,6 +6,8 @@ import com.barisdev.Url.Shortener.entity.Url;
 import com.barisdev.Url.Shortener.request.UrlRequest;
 import com.barisdev.Url.Shortener.request.UrlRequestToUrlConverter;
 import com.barisdev.Url.Shortener.service.UrlService;
+import com.barisdev.Url.Shortener.util.QRCodeGenerator;
+import com.google.zxing.WriterException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +41,14 @@ public class UrlController {
 
 
     @GetMapping
-    public ResponseEntity<List<UrlDto>> getAllUrls() {
+    public ResponseEntity<List<UrlDto>> getAllUrls() throws IOException, WriterException {
+        List<Url> urls=service.getAllUrl();
+        if(urls.size() != 0){
+            for(Url url:urls){
+                System.out.println("generated");
+                QRCodeGenerator.generateQRCode(url);
+            }
+        }
         return new ResponseEntity<List<UrlDto>>(
                 dtoToEntityConverter.convertAllToDto(service.getAllUrl()), HttpStatus.OK
 
