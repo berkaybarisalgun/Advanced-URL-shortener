@@ -23,4 +23,7 @@ public class UrlDto {
     private String ref;
 
     private LocalDate expirationDate;
+
+    private String qrCodePath;
+
 }

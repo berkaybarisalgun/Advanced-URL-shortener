@@ -3,19 +3,23 @@ package com.barisdev.Url.Shortener.service;
 
 import com.barisdev.Url.Shortener.entity.Url;
 import com.barisdev.Url.Shortener.repository.UrlRepository;
+import com.barisdev.Url.Shortener.util.QRCodeGenerator;
 import com.barisdev.Url.Shortener.util.RandomStringGenerator;
+import com.google.zxing.WriterException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UrlService {
-    private UrlRepository repository;
+    private final UrlRepository repository;
 
-    private RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
+    private final QRCodeGenerator qrCodeGenerator=new QRCodeGenerator();
+
+    private final RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
 
 
     public UrlService(UrlRepository repository) {
@@ -32,7 +36,7 @@ public class UrlService {
         );
     }
 
-    public Url create(Url url) {
+    public Url create(Url url) throws IOException, WriterException {
         if(url.getExpirationDate()==null || url.getExpirationDate().isBefore(LocalDate.now())){
             url.setExpirationDate(LocalDate.now().plusMonths(6));
         }
@@ -42,6 +46,10 @@ public class UrlService {
         } else if (repository.findByref(url.getRef()).isPresent()) {
             throw new RuntimeException("same value already exist");
         }
+
+        qrCodeGenerator.generateQRCode(url);
+
+        url.setQrCodePath(qrCodeGenerator.getQrCodeName());
         return repository.save(url);
     }
 

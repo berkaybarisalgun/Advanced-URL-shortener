@@ -14,14 +14,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -32,6 +29,8 @@ public class UrlController {
     private final DtoToEntityConverter dtoToEntityConverter;
 
     private final UrlRequestToUrlConverter urlRequestToUrlConverter;
+
+    private final QRCodeGenerator qrCodeGenerator=new QRCodeGenerator();
 
     public UrlController(UrlService service, DtoToEntityConverter dtoToEntityConverter, UrlRequestToUrlConverter urlRequestToUrlConverter) {
         this.service = service;
@@ -46,7 +45,7 @@ public class UrlController {
         if(urls.size() != 0){
             for(Url url:urls){
                 System.out.println("generated");
-                QRCodeGenerator.generateQRCode(url);
+                qrCodeGenerator.generateQRCode(url);
             }
         }
         return new ResponseEntity<List<UrlDto>>(
@@ -56,7 +55,7 @@ public class UrlController {
     }
 
     @GetMapping("/get/{ref}")
-    public ResponseEntity<UrlDto> getUrlByCode(@Valid @NotEmpty @PathVariable String ref) {
+    public ResponseEntity<UrlDto> getUrlByCode(@Valid @NotEmpty @PathVariable String ref) throws IOException, WriterException {
         ref = ref.toUpperCase();
         return new ResponseEntity<UrlDto>(
                 dtoToEntityConverter.convertToDto(service.getUrlByref(ref)), HttpStatus.OK
@@ -79,7 +78,7 @@ public class UrlController {
 
 
     @PostMapping("/create/")
-    public ResponseEntity<?> create(@Valid @RequestBody UrlRequest urlRequest) {
+    public ResponseEntity<?> create(@Valid @RequestBody UrlRequest urlRequest) throws IOException, WriterException {
         Url url = urlRequestToUrlConverter.urlRequestToUrl(urlRequest);
         return new ResponseEntity<UrlDto>(
                 dtoToEntityConverter.convertToDto(service.create(url)), HttpStatus.CREATED
@@ -93,7 +92,7 @@ public class UrlController {
     }
 
     @PutMapping("/update/{ref}") // Specify the URL for updating
-    public ResponseEntity<?> updateUrl(@Valid @RequestBody UrlRequest urlRequest, @PathVariable String ref) {
+    public ResponseEntity<?> updateUrl(@Valid @RequestBody UrlRequest urlRequest, @PathVariable String ref) throws IOException, WriterException {
 
         Url url = urlRequestToUrlConverter.urlRequestToUrl(urlRequest);
         url.setRef(ref); // Set the ref from the URL path

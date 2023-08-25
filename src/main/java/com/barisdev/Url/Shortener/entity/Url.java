@@ -32,6 +32,9 @@ public class Url {
     @Column
     private LocalDate expirationDate;
 
+    @Column
+    private String qrCodePath;
+
     public void setExpirationDateAsString(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.expirationDate = LocalDate.parse(dateString, formatter);
