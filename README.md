@@ -26,9 +26,25 @@ Welcome to the URL Shortener App—an innovative project currently in developmen
 - **POST /delete/{id}:** Delete an existing short URL.
 - **PUT /update/{ref}:** Modify an existing short URL.
 
+
+## QR Code Generation
+In addition to the core features mentioned earlier, the URL Shortener App offers a convenient QR code generation functionality. This feature allows users to generate QR codes for the shortened URLs, enabling easy sharing and quick access for users who prefer scanning QR codes. The QR codes can be generated for any created short URL and can be downloaded or shared directly.
+
+## How to Generate a QR Code
+
+After creating a short URL using the /create endpoint, you can access the QR code generation feature.
+To generate a QR code for a specific URL, send a GET request to the following endpoint:
+POST /create/
+
+The app will respond with the generated QR code path in your local driver.
+
+Users can download the QR code image and use it for sharing or printing.
+
+This QR code generation feature adds a new layer of convenience to the URL Shortener App, making it easier for users to share and access the shortened URLs using QR codes.
+
 ## Usage Example
 
-1. Creating a new short URL is as simple as sending a POST request:
+1. Creating a new URL is as simple as sending a POST request:
 
    ```http
    POST /create/
@@ -36,6 +52,9 @@ Welcome to the URL Shortener App—an innovative project currently in developmen
      "url": "https://www.example.com"
    }
    ```
+
+   It will response you with qrCode!
+
 
 2. Retrieve a generated short URL using:
 ```http
