@@ -1,7 +1,10 @@
 package com.barisdev.Url.Shortener.service;
 
 
+import ch.qos.logback.core.util.TimeUtil;
 import com.barisdev.Url.Shortener.entity.Url;
+import com.barisdev.Url.Shortener.exceptions.DateExceptionHandler;
+import com.barisdev.Url.Shortener.exceptions.RefException;
 import com.barisdev.Url.Shortener.repository.UrlRepository;
 import com.barisdev.Url.Shortener.util.QRCodeGenerator;
 import com.barisdev.Url.Shortener.util.RandomStringGenerator;
@@ -36,15 +39,18 @@ public class UrlService {
         );
     }
 
-    public Url create(Url url) throws IOException, WriterException {
-        if(url.getExpirationDate()==null || url.getExpirationDate().isBefore(LocalDate.now())){
+    public Url create(Url url) throws Exception {
+        if(url.getExpirationDate()==null){
             url.setExpirationDate(LocalDate.now().plusMonths(6));
+        }else if(url.getExpirationDate().isBefore(LocalDate.now())){
+            throw new DateExceptionHandler.PastDateException();
         }
+
 
         if (url.getRef() == null || url.getRef().isEmpty()) {
             url.setRef(generateref());
         } else if (repository.findByref(url.getRef()).isPresent()) {
-            throw new RuntimeException("same value already exist");
+            throw new RefException.SameRefException();
         }
 
         qrCodeGenerator.generateQRCode(url);

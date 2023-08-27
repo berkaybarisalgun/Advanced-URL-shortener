@@ -78,14 +78,14 @@ public class UrlController {
 
 
     @PostMapping("/create/")
-    public ResponseEntity<?> create(@Valid @RequestBody UrlRequest urlRequest) throws IOException, WriterException {
+    public ResponseEntity<?> create(@Valid @RequestBody UrlRequest urlRequest) throws Exception {
         Url url = urlRequestToUrlConverter.urlRequestToUrl(urlRequest);
         return new ResponseEntity<UrlDto>(
                 dtoToEntityConverter.convertToDto(service.create(url)), HttpStatus.CREATED
         );
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.ok("Url deleted successfully");
