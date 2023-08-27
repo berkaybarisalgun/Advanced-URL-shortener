@@ -4,6 +4,7 @@ package com.barisdev.Url.Shortener.service;
 import ch.qos.logback.core.util.TimeUtil;
 import com.barisdev.Url.Shortener.entity.Url;
 import com.barisdev.Url.Shortener.exceptions.DateExceptionHandler;
+import com.barisdev.Url.Shortener.exceptions.IdException;
 import com.barisdev.Url.Shortener.exceptions.RefException;
 import com.barisdev.Url.Shortener.repository.UrlRepository;
 import com.barisdev.Url.Shortener.util.QRCodeGenerator;
@@ -71,7 +72,7 @@ public class UrlService {
         if (urlDelete.isPresent()) {
             repository.deleteById(urlDelete.get().getId());
         } else {
-            throw new RuntimeException("Resource not found to delete");
+            throw new IdException.idNotFoundException(id);
         }
     }
 
@@ -81,6 +82,7 @@ public class UrlService {
         if (existingUrlOpt.isPresent()) {
             Url existingUrl = existingUrlOpt.get();
             existingUrl.setUrl(url.getUrl()); // Update the URL value
+            existingUrl.setExpirationDate(url.getExpirationDate());
 
             return repository.save(existingUrl);
         } else {
