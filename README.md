@@ -1,6 +1,6 @@
 # URL Shortener App
 
-Welcome to the URL Shortener App—an innovative project currently in development. Developed using Spring Boot and powered by an H2 database, this application empowers users to shorten lengthy URLs and seamlessly redirect users from concise URLs to their original, longer counterparts. Through an array of API endpoints, this app facilitates the creation, retrieval, update, and deletion of short URLs, delivering an enhanced web experience. Please note that while the project is making strides, not all features may be fully functional at this time.
+Welcome to the URL Shortener App—an innovative project currently in development. Developed using Spring Boot and powered by an H2 database, this application empowers users to shorten lengthy URLs and seamlessly redirect users from concise URLs to their original, longer counterparts. Through an array of API endpoints, this app facilitates the creation, retrieval, update, and deletion of URLs, delivering an enhanced web experience. Please note that while the project is making strides, not all features may be fully functional at this time.
 
 ## Technologies
 
@@ -19,20 +19,20 @@ Welcome to the URL Shortener App—an innovative project currently in developmen
 
 ## API Endpoints
 
-- **GET /:** Retrieve a list of all short URLs.
-- **GET /get/{ref}:** Retrieve a specific short URL using its reference.
-- **GET /{ref}:** Redirect a short URL to its original, longer URL.
-- **POST /create/:** Craft a brand-new short URL.
-- **POST /delete/{id}:** Delete an existing short URL.
-- **PUT /update/{ref}:** Modify an existing short URL.
+- **GET /:** Retrieve a list of all URLs.
+- **GET /get/{ref}:** Retrieve a specific URL using its reference.
+- **GET /{ref}:** Redirect a URL to its original, longer URL.
+- **POST /create/:** Craft a brand-new URL.
+- **POST /delete/{id}:** Delete an existing URL.
+- **PUT /update/{ref}:** Modify an existing URL.
 
 
 ## QR Code Generation
-In addition to the core features mentioned earlier, the URL Shortener App offers a convenient QR code generation functionality. This feature allows users to generate QR codes for the shortened URLs, enabling easy sharing and quick access for users who prefer scanning QR codes. The QR codes can be generated for any created short URL and can be downloaded or shared directly.
+In addition to the core features mentioned earlier, the URL Shortener App offers a convenient QR code generation functionality. This feature allows users to generate QR codes for the shortened URLs, enabling easy sharing and quick access for users who prefer scanning QR codes. The QR codes can be generated for any created URL and can be downloaded or shared directly.
 
 ## How to Generate a QR Code
 
-After creating a short URL using the /create endpoint, you can access the QR code generation feature.
+After creating a URL using the /create endpoint, you can access the QR code generation feature.
 To generate a QR code for a specific URL, send a GET request to the following endpoint:
 POST /create/
 
@@ -56,7 +56,7 @@ This QR code generation feature adds a new layer of convenience to the URL Short
    It will response you with qrCode!
 
 
-2. Retrieve a generated short URL using:
+2. Retrieve a generated URL using:
 ```http
 GET /get/{ref}
 ```
