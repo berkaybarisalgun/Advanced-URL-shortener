@@ -34,9 +34,15 @@ public class UrlService {
     }
 
     public Url getUrlByref(String ref) {
-        return repository.findByref(ref).orElseThrow(
-                () -> new RuntimeException("not found")
-        );
+
+        Optional<Url> url=repository.findByref(ref);
+        if(url.isPresent()){
+            return url.get();
+        }
+        else{
+            throw new RefException.RefNotFoundException(ref);
+        }
+
     }
 
     public Url create(Url url) throws Exception {
@@ -50,12 +56,13 @@ public class UrlService {
         if (url.getRef() == null || url.getRef().isEmpty()) {
             url.setRef(generateref());
         } else if (repository.findByref(url.getRef()).isPresent()) {
-            throw new RefException.SameRefException();
+            throw new RefException.sameRefException(url.getRef());
         }
 
         qrCodeGenerator.generateQRCode(url);
 
         url.setQrCodePath(qrCodeGenerator.getQrCodeName());
+        url.setRef(url.getRef().toUpperCase());
         return repository.save(url);
     }
 
