@@ -1,6 +1,6 @@
 # URL Shortener App
 
-Welcome to the URL Shortener App—an innovative project currently in development. Developed using Spring Boot and powered by an H2 database, this application empowers users to shorten lengthy URLs and seamlessly redirect users from concise URLs to their original, longer counterparts. Through an array of API endpoints, this app facilitates the creation, retrieval, update, and deletion of URLs, delivering an enhanced web experience. Please note that while the project is making strides, not all features may be fully functional at this time.
+Welcome to the URL Shortener App! This application, built with Spring Boot and backed by an H2 database, empowers users to shorten long URLs and seamlessly redirect them to their original, longer counterparts. The app offers a range of API endpoints for creating, retrieving, updating, and deleting URLs, enhancing the web experience. Please note that while the project is in progress, not all features may be fully functional at this time.
 
 ## Technologies
 
@@ -14,8 +14,8 @@ Welcome to the URL Shortener App—an innovative project currently in developmen
 ## Installation
 
 1. Begin by cloning this repository to your local machine.
-2. Fine-tune the H2 database settings within the `application.properties` file.
-3. Kickstart the application by executing the command `mvn spring-boot:run`.
+2. Configure the H2 database settings within the `application.properties` file.
+3. Start the application by executing the command `mvn spring-boot:run`.
 
 ## API Endpoints
 
@@ -28,7 +28,7 @@ Welcome to the URL Shortener App—an innovative project currently in developmen
 
 
 ## QR Code Generation
-In addition to the core features mentioned earlier, the URL Shortener App offers a convenient QR code generation functionality. This feature allows users to generate QR codes for the shortened URLs, enabling easy sharing and quick access for users who prefer scanning QR codes. The QR codes can be generated for any created URL and can be downloaded or shared directly.
+In addition to the core features, the URL Shortener App offers QR code generation functionality. This feature allows users to generate QR codes for the shortened URLs, simplifying sharing and quick access for those who prefer scanning QR codes. QR codes can be generated for any created URL and can be downloaded or shared directly.
 
 ## How to Generate a QR Code
 
